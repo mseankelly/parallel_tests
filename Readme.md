@@ -1,4 +1,4 @@
-The intent of this fork of grosser/parallel_tests is to make it work in the Windows environment.
+_The intent of this fork of grosser/parallel_tests is to make it work in the Windows environment._
 
 Speedup Test::Unit + RSpec + Cucumber by running parallel on multiple CPUs (or cores).<br/>
 ParallelTests splits tests into even groups(by number of tests or runtime) and runs each group in a single process with its own database.
