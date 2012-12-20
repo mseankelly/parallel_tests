@@ -3,11 +3,11 @@ _The intent of this fork of grosser/parallel_tests is to make it work in the Win
 Speedup Test::Unit + RSpec + Cucumber by running parallel on multiple CPUs (or cores).<br/>
 ParallelTests splits tests into even groups(by number of tests or runtime) and runs each group in a single process with its own database.
 
-[upgrading from 0.6 ?](https://github.com/grosser/parallel_tests/wiki/Upgrading-0.6.x-to-0.7.x)
+[upgrading from 0.6 ?](https://github.com/mseankelly/parallel_tests/wiki/Upgrading-0.6.x-to-0.7.x)
 
 Setup for Rails
 ===============
-[still using Rails 2?](https://github.com/grosser/parallel_tests/blob/master/ReadmeRails2.md)
+[still using Rails 2?](https://github.com/mseankelly/parallel_tests/blob/master/ReadmeRails2.md)
 
 ### Install
 If you use RSpec: ensure you got >= 2.4
@@ -20,7 +20,7 @@ gem "parallel_tests", :group => :development
 ```
 OR as plugin
 
-    rails plugin install git://github.com/grosser/parallel_tests.git
+    rails plugin install git://github.com/mseankelly/parallel_tests.git
 
 ```ruby
 # add to Gemfile
@@ -164,16 +164,16 @@ TIPS
  - [RSpec] delete `script/spec`
  - [[Spork](https://github.com/sporkrb/spork)] does not work with parallel_tests
  - [RSpec] remove --loadby from you spec/*.opts
- - [RSpec] Instantly see failures (instead of just a red F) with [rspec-instafail](https://github.com/grosser/rspec-instafail)
+ - [RSpec] Instantly see failures (instead of just a red F) with [rspec-instafail](https://github.com/mseankelly/rspec-instafail)
  - [Bundler] if you have a `Gemfile` then `bundle exec` will be used to run tests
  - [Cucumber] add a `parallel: foo` profile to your `config/cucumber.yml` and it will be used to run parallel tests
- - [Capybara setup](https://github.com/grosser/parallel_tests/wiki)
- - [Sphinx setup](https://github.com/grosser/parallel_tests/wiki)
- - [Capistrano setup](https://github.com/grosser/parallel_tests/wiki/Remotely-with-capistrano) let your tests run on a big box instead of your laptop
+ - [Capybara setup](https://github.com/mseankelly/parallel_tests/wiki)
+ - [Sphinx setup](https://github.com/mseankelly/parallel_tests/wiki)
+ - [Capistrano setup](https://github.com/mseankelly/parallel_tests/wiki/Remotely-with-capistrano) let your tests run on a big box instead of your laptop
  - [SQL schema format] use :ruby schema format to get faster parallel:prepare`
  - `export PARALLEL_TEST_PROCESSORS=X` in your environment and parallel_tests will use this number of processors by default
  - [ZSH] use quotes to use rake arguments `rake "parallel:prepare[3]"`
- - [email_spec and/or action_mailer_cache_delivery](https://github.com/grosser/parallel_tests/wiki)
+ - [email_spec and/or action_mailer_cache_delivery](https://github.com/mseankelly/parallel_tests/wiki)
  - [Memcached] use different namespaces e.g. `config.cache_store = ..., :namespace => "test_#{ENV['TEST_ENV_NUMBER']}"`
 
 TODO
@@ -185,46 +185,8 @@ TODO
 
 Authors
 ====
-inspired by [pivotal labs](http://pivotallabs.com/users/miked/blog/articles/849-parallelize-your-rspec-suite)
+Forked from: [grosser/parallel_tests](http://github.com/grosser/parallel_tests)
 
-### [Contributors](http://github.com/grosser/parallel_tests/contributors)
- - [Charles Finkel](http://charlesfinkel.com/)
- - [Indrek Juhkam](http://urgas.eu)
- - [Jason Morrison](http://jayunit.net)
- - [jinzhu](http://github.com/jinzhu)
- - [Joakim Kolsjö](http://www.rubyblocks.se)
- - [Kevin Scaldeferri](http://kevin.scaldeferri.com/blog/)
- - [Kpumuk](http://kpumuk.info/)
- - [Maksim Horbul](http://github.com/mhorbul)
- - [Pivotal Labs](http://www.pivotallabs.com)
- - [Rohan Deshpande](http://github.com/rdeshpande)
- - [Tchandy](http://thiagopradi.net/)
- - [Terence Lee](http://hone.heroku.com/)
- - [Will Bryant](http://willbryant.net/)
- - [Fred Wu](http://fredwu.me)
- - [xxx](https://github.com/xxx)
- - [Levent Ali](http://purebreeze.com/)
- - [Michael Kintzer](https://github.com/rockrep)
- - [nathansobo](https://github.com/nathansobo)
- - [Joe Yates](http://titusd.co.uk)
- - [asmega](http://www.ph-lee.com)
- - [Doug Barth](https://github.com/dougbarth)
- - [Geoffrey Hichborn](https://github.com/phene)
- - [Trae Robrock](https://github.com/trobrock)
- - [Lawrence Wang](https://github.com/levity)
- - [Sean Walbran](https://github.com/seanwalbran)
- - [Lawrence Wang](https://github.com/levity)
- - [Potapov Sergey](https://github.com/greyblake)
- - [Łukasz Tackowiak](https://github.com/lukasztackowiak)
- - [Pedro Carriço](https://github.com/pedrocarrico)
- - [Pablo Manrubia Díez](https://github.com/pmanrubia)
- - [Slawomir Smiechura](https://github.com/ssmiech)
- - [Georg Friedrich](https://github.com/georg)
- - [R. Tyler Croy](https://github.com/rtyler)
- - [Ulrich Berkmüller](https://github.com/ulrich-berkmueller)
- - [Grzegorz Derebecki](https://github.com/madmax)
- - [Florian Motlik](https://github.com/flomotlik)
-
-[Michael Grosser](http://grosser.it)<br/>
-michael@grosser.it<br/>
+[Michael Kelly](http://github.com/mseankelly)<br/>
+m.sean.kelly AT gmail.com<br/>
 License: MIT
