@@ -161,16 +161,16 @@ TIPS
  - [RSpec] delete `script/spec`
  - [[Spork](https://github.com/sporkrb/spork)] does not work with parallel_tests
  - [RSpec] remove --loadby from you spec/*.opts
- - [RSpec] Instantly see failures (instead of just a red F) with [rspec-instafail](https://github.com/mseankelly/rspec-instafail)
+ - [RSpec] Instantly see failures (instead of just a red F) with [rspec-instafail](https://github.com/grosser/rspec-instafail)
  - [Bundler] if you have a `Gemfile` then `bundle exec` will be used to run tests
  - [Cucumber] add a `parallel: foo` profile to your `config/cucumber.yml` and it will be used to run parallel tests
- - [Capybara setup](https://github.com/mseankelly/parallel_tests/wiki)
- - [Sphinx setup](https://github.com/mseankelly/parallel_tests/wiki)
- - [Capistrano setup](https://github.com/mseankelly/parallel_tests/wiki/Remotely-with-capistrano) let your tests run on a big box instead of your laptop
+ - [Capybara setup](https://github.com/grosser/parallel_tests/wiki)
+ - [Sphinx setup](https://github.com/grosser/parallel_tests/wiki)
+ - [Capistrano setup](https://github.com/grosser/parallel_tests/wiki/Remotely-with-capistrano) let your tests run on a big box instead of your laptop
  - [SQL schema format] use :ruby schema format to get faster parallel:prepare`
  - `export PARALLEL_TEST_PROCESSORS=X` in your environment and parallel_tests will use this number of processors by default
  - [ZSH] use quotes to use rake arguments `rake "parallel:prepare[3]"`
- - [email_spec and/or action_mailer_cache_delivery](https://github.com/mseankelly/parallel_tests/wiki)
+ - [email_spec and/or action_mailer_cache_delivery](https://github.com/grosser/parallel_tests/wiki)
  - [Memcached] use different namespaces e.g. `config.cache_store = ..., :namespace => "test_#{ENV['TEST_ENV_NUMBER']}"`
 
 TODO
