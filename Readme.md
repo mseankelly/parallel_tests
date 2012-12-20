@@ -3,11 +3,8 @@ _The intent of this fork of grosser/parallel_tests is to make it work in the Win
 Speedup Test::Unit + RSpec + Cucumber by running parallel on multiple CPUs (or cores).<br/>
 ParallelTests splits tests into even groups(by number of tests or runtime) and runs each group in a single process with its own database.
 
-[upgrading from 0.6 ?](https://github.com/mseankelly/parallel_tests/wiki/Upgrading-0.6.x-to-0.7.x)
-
 Setup for Rails
 ===============
-[still using Rails 2?](https://github.com/mseankelly/parallel_tests/blob/master/ReadmeRails2.md)
 
 ### Install
 If you use RSpec: ensure you got >= 2.4
