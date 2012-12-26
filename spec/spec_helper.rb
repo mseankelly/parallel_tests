@@ -4,6 +4,7 @@ FAKE_RAILS_ROOT = './tmp/pspecs/fixtures'
 
 require 'tempfile'
 require 'parallel_tests'
+require 'parallel_tests/platform_utils'
 require 'parallel_tests/test/runner'
 require 'parallel_tests/test/runtime_logger'
 
@@ -57,7 +58,9 @@ def test_tests_in_groups(klass, folder, suffix)
 
   describe :tests_in_groups do
     before :all do
-      system "rm -rf #{FAKE_RAILS_ROOT}; mkdir -p #{test_root}/temp"
+      #system "rm -rf #{FAKE_RAILS_ROOT}; mkdir -p #{test_root}/temp"
+      ParallelTests::PlatformUtils.rm_rf(FAKE_RAILS_ROOT)
+      ParallelTests::PlatformUtils.mkdir_p("#{test_root}/temp")
 
       @files = [0,1,2,3,4,5,6,7].map do |i|
         size = 99
@@ -67,12 +70,12 @@ def test_tests_in_groups(klass, folder, suffix)
       end
 
       @log = klass.runtime_log
-      `mkdir -p #{File.dirname(@log)}`
-      `rm -f #{@log}`
+      ParallelTests::PlatformUtils.mkdir_p(File.dirname(@log))
+      ParallelTests::PlatformUtils.rm_f(@log)
     end
 
     after :all do
-      `rm -f #{klass.runtime_log}`
+      ParallelTests::PlatformUtils.rm_f(klass.runtime_log)
     end
 
     def setup_runtime_log

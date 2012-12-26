@@ -2,11 +2,11 @@ require 'spec_helper'
 
 describe 'CLI' do
   before do
-    `rm -rf #{folder}`
+    ParallelTests::PlatformUtils.rm_rf(folder)
   end
 
   after do
-    `rm -rf #{folder}`
+    ParallelTests::PlatformUtils.rm_rf(folder)
   end
 
   def folder
