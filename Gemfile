@@ -6,4 +6,6 @@ group :development do
   gem 'rspec', '>=2.4'
   gem 'cucumber'
   gem 'rake'
+  gem 'win32-process'
+  gem 'win32-dir'
 end

@@ -15,6 +15,8 @@ GEM
       json (>= 1.4.6)
       term-ansicolor (>= 1.0.6)
     diff-lcs (1.1.2)
+    ffi (1.2.0)
+    ffi (1.2.0-x86-mingw32)
     gherkin (2.7.6)
       json (>= 1.4.6)
     gherkin (2.7.6-x86-mingw32)
@@ -32,6 +34,10 @@ GEM
     rspec-mocks (2.6.0)
     term-ansicolor (1.0.7)
     test-unit (2.4.4)
+    win32-dir (0.4.1)
+      ffi (>= 1.0.0)
+    win32-process (0.7.0)
+      ffi (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -43,3 +49,5 @@ DEPENDENCIES
   rake
   rspec (>= 2.4)
   test-unit
+  win32-dir
+  win32-process
