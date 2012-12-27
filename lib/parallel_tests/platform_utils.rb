@@ -1,4 +1,6 @@
 require 'fileutils'
+require 'tmpdir'
+require 'rbconfig'
 
 module ParallelTests
   class PlatformUtils
@@ -12,6 +14,19 @@ module ParallelTests
 
     def self.mkdir_p(list)
       FileUtils.mkdir_p(list)
+    end
+
+    def self.tmpdir
+      Dir.tmpdir
+    end
+
+    def self.dev_null_redirect
+      windows? ? "> NUL" : "2>&1"
+    end
+
+    def self.windows?
+      puts RbConfig::CONFIG['host_os']
+      RbConfig::CONFIG['host_os'] =~ /mswin|mingw|windows|cygwin/i
     end
   end
 end

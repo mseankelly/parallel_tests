@@ -33,13 +33,14 @@ describe 'CLI' do
   end
 
   def ensure_folder(folder)
-    `mkdir -p #{folder}` unless File.exist?(folder)
+    ParallelTests::PlatformUtils.mkdir_p(folder) unless File.exist?(folder)
   end
 
   def run_tests(test_folder, options={})
     ensure_folder folder
     processes = "-n #{options[:processes]||2}" unless options[:processes] == false
-    command = "cd #{folder} && #{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]} 2>&1"
+    command = "cd #{folder} && #{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
+    puts command
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
