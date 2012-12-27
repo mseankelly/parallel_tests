@@ -25,7 +25,6 @@ module ParallelTests
     end
 
     def self.windows?
-      puts RbConfig::CONFIG['host_os']
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw|windows|cygwin/i
     end
   end

@@ -10,7 +10,7 @@ describe 'CLI' do
   end
 
   def folder
-    "/tmp/parallel_tests_tests"
+    "#{ParallelTests::PlatformUtils.tmpdir}/parallel_tests_tests"
   end
 
   def write(file, content)
@@ -29,7 +29,7 @@ describe 'CLI' do
   end
 
   def executable(options={})
-    "#{bin_folder}/parallel_#{options[:type] || 'test'}"
+    "#{'ruby ' if ParallelTests::PlatformUtils.windows?}#{bin_folder}/parallel_#{options[:type] || 'test'}"
   end
 
   def ensure_folder(folder)
