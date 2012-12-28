@@ -4,6 +4,10 @@ task :default do
   sh "rspec spec/"
 end
 
+task :formatted do
+  sh "rspec spec/ --color --format d"
+end
+
 # extracted from https://github.com/grosser/project_template
 rule /^version:bump:.*/ do |t|
   sh "git status | grep 'nothing to commit'" # ensure we are not dirty

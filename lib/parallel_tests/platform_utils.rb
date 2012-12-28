@@ -16,12 +16,20 @@ module ParallelTests
       FileUtils.mkdir_p(list)
     end
 
+    def self.mkdir(list)
+      FileUtils.mkdir(list)
+    end
+
     def self.tmpdir
       Dir.tmpdir
     end
 
     def self.dev_null_redirect
       windows? ? "> NUL" : "2>&1"
+    end
+
+    def self.dev_null
+      windows? ? "NUL" : "/dev/null"
     end
 
     def self.windows?

@@ -113,16 +113,16 @@ EOF
 
     def with_files(files)
       begin
-        root = "/tmp/test-find_tests-#{rand(999)}"
-        `mkdir #{root}`
+        root = "#{ParallelTests::PlatformUtils.tmpdir}/test-find_tests-#{rand(999)}"
+        ParallelTests::PlatformUtils.mkdir(root)
         files.each do |file|
           parent = "#{root}/#{File.dirname(file)}"
-          `mkdir -p #{parent}` unless File.exist?(parent)
+          ParallelTests::PlatformUtils.mkdir_p(parent) unless File.exist?(parent)
           `touch #{root}/#{file}`
         end
         yield root
       ensure
-        `rm -rf #{root}`
+        ParallelTests::PlatformUtils.rm_rf(root)
       end
     end
 
