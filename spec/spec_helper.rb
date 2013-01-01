@@ -58,7 +58,6 @@ def test_tests_in_groups(klass, folder, suffix)
 
   describe :tests_in_groups do
     before :all do
-      #system "rm -rf #{FAKE_RAILS_ROOT}; mkdir -p #{test_root}/temp"
       ParallelTests::PlatformUtils.rm_rf(FAKE_RAILS_ROOT)
       ParallelTests::PlatformUtils.mkdir_p("#{test_root}/temp")
 

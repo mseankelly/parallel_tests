@@ -32,6 +32,10 @@ module ParallelTests
       windows? ? "NUL" : "/dev/null"
     end
 
+    def self.touch(list)
+      FileUtils.touch(list)
+    end
+
     def self.windows?
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw|windows|cygwin/i
     end

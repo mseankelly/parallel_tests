@@ -118,7 +118,7 @@ EOF
         files.each do |file|
           parent = "#{root}/#{File.dirname(file)}"
           ParallelTests::PlatformUtils.mkdir_p(parent) unless File.exist?(parent)
-          `touch #{root}/#{file}`
+          ParallelTests::PlatformUtils.touch("#{root}/#{file}")
         end
         yield root
       ensure
