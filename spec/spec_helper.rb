@@ -109,7 +109,6 @@ def test_tests_in_groups(klass, folder, suffix)
 
     it 'should partition correctly with an uneven group size' do
       groups = klass.tests_in_groups([test_root], 3)
-      puts groups
       groups.map{|g| size_of(g)}.should =~ [300, 300, 200]
     end
 

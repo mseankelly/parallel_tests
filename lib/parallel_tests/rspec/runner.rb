@@ -17,7 +17,7 @@ module ParallelTests
           cmd = (run("bundle show rspec") =~ %r{/rspec-1[^/]+$} ? "spec" : "rspec")
           "bundle exec #{cmd}"
         else
-          %w[spec rspec].detect{|cmd| system "#{cmd} --version > /dev/null 2>&1" }
+          %w[spec rspec].detect{|cmd| system "#{cmd} --version #{ParallelTests::PlatformUtils.dev_null_redirect}" }
         end
         cmd or raise("Can't find executables rspec or spec")
       end
