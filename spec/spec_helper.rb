@@ -26,7 +26,8 @@ def mocked_process
 end
 
 def size_of(group)
-  group.inject(0) { |sum, test| sum += File.stat(test).size }
+  windows_file_size_offset = ParallelTests::PlatformUtils.windows? ? 1 : 0
+  group.inject(0) { |sum, test| sum += (File.stat(test).size - windows_file_size_offset) }
 end
 
 # Uses /tmp/parallel_tests/application as the cwd so we can create and remove
@@ -108,6 +109,7 @@ def test_tests_in_groups(klass, folder, suffix)
 
     it 'should partition correctly with an uneven group size' do
       groups = klass.tests_in_groups([test_root], 3)
+      puts groups
       groups.map{|g| size_of(g)}.should =~ [300, 300, 200]
     end
 
