@@ -30,7 +30,7 @@ module ParallelTests
       # finds all tests and partitions them into groups
       def self.tests_in_groups(tests, num_groups, options={})
         tests = find_tests(tests, options)
-
+        
         if options[:group_by] == :found
           Grouper.in_groups(tests, num_groups)
         else

@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'tmpdir'
 require 'rbconfig'
+require 'win32/dir/functions'
 
 module ParallelTests
   class PlatformUtils
@@ -34,6 +35,14 @@ module ParallelTests
 
     def self.touch(list)
       FileUtils.touch(list)
+    end
+
+    def self.cat
+      windows? ? "type" : "cat"
+    end
+
+    def self.symlink(src, dest)
+      windows? ? Dir.create_junction(dest, src) : FileUtils.symlink(src, dest)
     end
 
     def self.windows?

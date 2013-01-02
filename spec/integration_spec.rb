@@ -25,7 +25,7 @@ describe 'CLI' do
   end
 
   def bin_folder
-    "#{File.expand_path(File.dirname(__FILE__))}/../bin"
+    "#{File.expand_path(File.dirname(__FILE__)).sub("/spec", "")}/bin"
   end
 
   def executable(options={})
@@ -42,6 +42,7 @@ describe 'CLI' do
     command = "cd #{folder} && #{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
     puts command
     result = `#{command}`
+    puts "result: #{result}"
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
   end

@@ -22,7 +22,7 @@ OutputLogger = Struct.new(:output) do
 end
 
 def mocked_process
-  open("|cat #{ParallelTests::PlatformUtils.dev_null}")
+  open("|#{ParallelTests::PlatformUtils.cat} #{ParallelTests::PlatformUtils.dev_null}")
 end
 
 def size_of(group)
