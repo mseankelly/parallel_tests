@@ -50,7 +50,6 @@ describe ParallelTests::Tasks do
 
     it "should have the executable" do
       File.file?(full_path).should == true
-      File.executable?(full_path).should == true
     end
 
     it "runs command in parallel" do
@@ -115,7 +114,9 @@ describe ParallelTests::Tasks do
       end
 
       it "should not filter and fail" do
-        call("echo 123 && test", "123").should == ["123\n", false]
+        result = call("echo 123 && test", "123")
+        result[0].should include('123')
+        result[1].should == false
       end
     end
   end

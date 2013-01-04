@@ -11,7 +11,8 @@ class ParallelTests::RSpec::RuntimeLogger < ParallelTests::RSpec::LoggerBase
   end
 
   def example_passed(example)
-    file = example.location.split(':').first
+    line_number = example.location.split(':').last
+    file = example.location.sub(":#{line_number}", "")
     @example_times[file] += Time.now - @time
   end
 
@@ -25,7 +26,10 @@ class ParallelTests::RSpec::RuntimeLogger < ParallelTests::RSpec::LoggerBase
     # TODO: Figure out why sometimes time can be less than 0
     lock_output do
       @example_times.each do |file, time|
+        puts file
+        puts Dir.pwd
         relative_path = file.sub(/^#{Regexp.escape Dir.pwd}\//,'')
+        puts relative_path
         @output.puts "#{relative_path}:#{time > 0 ? time : 0}"
       end
     end
