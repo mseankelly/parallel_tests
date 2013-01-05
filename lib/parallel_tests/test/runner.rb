@@ -1,3 +1,5 @@
+require 'parallel_tests/platform_utils'
+
 module ParallelTests
   module Test
     class Runner
@@ -40,7 +42,7 @@ module ParallelTests
       end
 
       def self.execute_command(cmd, process_number, options)
-        cmd = "TEST_ENV_NUMBER=#{test_env_number(process_number)} ; export TEST_ENV_NUMBER; #{cmd}"
+        cmd = "#{ParallelTests::PlatformUtils.export_environment_variable('TEST_ENV_NUMBER',test_env_number(process_number))}; #{cmd}"
         f = open("|#{cmd}", 'r')
         output = fetch_output(f)
         f.close

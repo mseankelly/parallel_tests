@@ -45,6 +45,10 @@ module ParallelTests
       windows? ? Dir.create_junction(dest, src) : FileUtils.symlink(src, dest)
     end
 
+    def self.export_environment_variable(name, value)
+      windows? ? "SET #{name}=#{value}" : "#{name}=#{value} ; export #{name}"
+    end
+
     def self.windows?
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw|windows|cygwin/i
     end

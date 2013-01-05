@@ -1,4 +1,5 @@
 require 'parallel_tests/test/runner'
+require 'parallel_tests/platform_utils'
 
 module ParallelTests
   module RSpec
