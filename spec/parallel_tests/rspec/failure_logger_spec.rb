@@ -66,8 +66,8 @@ describe ParallelTests::RSpec::FailuresLogger do
     @logger.dump_failures
     @logger.dump_summary(1,2,3,4)
 
-    clean_output.should =~ %r(\./spec/path/to/example:123)
-    clean_output.should =~ %r(\./spec/path/to/example2:456)
+    clean_output.should =~ %r(\/spec/path/to/example:123)
+    clean_output.should =~ %r(\/spec/path/to/example2:456)
   end
 
 

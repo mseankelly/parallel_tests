@@ -35,7 +35,8 @@ class ParallelTests::RSpec::FailuresLogger < ParallelTests::RSpec::LoggerBase
 
   def dump_commands_to_rerun_failed_examples_rspec_1
     (@failed_examples||[]).each do |example|
-      file, line = example.location.to_s.split(':')
+      line = example.location.to_s.split(':').last
+      file = example.location.to_s.sub(":#{line}", "")
       next unless file and line
       file.gsub!(%r(^.*?/spec/), './spec/')
       @output.puts "#{ParallelTests::RSpec::Runner.executable} #{file}:#{line} # #{example.description}"
