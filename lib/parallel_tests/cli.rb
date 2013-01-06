@@ -29,7 +29,7 @@ module ParallelTest
         groups = runner.tests_in_groups(options[:files], num_processes, options)
         report_number_of_tests runner, groups
 
-        test_results = Parallel.map(groups, :in_threads => groups.size) do |group|
+        test_results = Parallel.map(groups, :in_processes => groups.size) do |group|
           run_tests(runner, group, groups.index(group), options)
         end
 
@@ -122,7 +122,7 @@ TEXT
           ParallelTests::Test::Runner.execute_command(command, i, options)
         end
       else
-        Parallel.map(runs, :in_threads => num_processes) do |i|
+        Parallel.map(runs, :in_processes => num_processes) do |i|
           ParallelTests::Test::Runner.execute_command(command, i, options)
         end
       end.flatten

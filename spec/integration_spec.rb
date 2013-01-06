@@ -40,6 +40,7 @@ describe 'CLI' do
     ensure_folder folder
     processes = "-n #{options[:processes]||2}" unless options[:processes] == false
     command = "cd #{folder} && #{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
+    puts command
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
