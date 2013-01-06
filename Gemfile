@@ -6,6 +6,6 @@ group :development do
   gem 'rspec', '>=2.4'
   gem 'cucumber'
   gem 'rake'
-  gem 'win32-process'
+  gem 'parallel',  ">=0.7.0", :git => "git://github.com/mseankelly/parallel.git"
   gem 'win32-dir'
 end

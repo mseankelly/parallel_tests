@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/mseankelly/parallel.git
+  revision: f848265aabc43ef40ef199a07a7525f658100840
+  specs:
+    parallel (0.7.0)
+
 PATH
   remote: .
   specs:
@@ -22,7 +28,6 @@ GEM
     gherkin (2.7.6-x86-mingw32)
       json (>= 1.4.6)
     json (1.6.4)
-    parallel (0.5.18)
     rake (0.8.7)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
@@ -36,8 +41,6 @@ GEM
     test-unit (2.4.4)
     win32-dir (0.4.1)
       ffi (>= 1.0.0)
-    win32-process (0.7.0)
-      ffi (>= 1.0.0)
 
 PLATFORMS
   ruby
@@ -45,9 +48,9 @@ PLATFORMS
 
 DEPENDENCIES
   cucumber
+  parallel (>= 0.7.0)!
   parallel_tests!
   rake
   rspec (>= 2.4)
   test-unit
   win32-dir
-  win32-process
