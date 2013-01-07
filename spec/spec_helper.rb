@@ -25,6 +25,10 @@ def mocked_process
   open("|#{ParallelTests::PlatformUtils.cat} #{ParallelTests::PlatformUtils.dev_null}")
 end
 
+def mocked_spawned_process
+  spawn("#{ParallelTests::PlatformUtils.cat} #{ParallelTests::PlatformUtils.dev_null}")
+end
+
 def size_of(group)
   windows_file_size_offset = ParallelTests::PlatformUtils.windows? ? 1 : 0
   group.inject(0) { |sum, test| sum += (File.stat(test).size - windows_file_size_offset) }
