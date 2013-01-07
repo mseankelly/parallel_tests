@@ -1,9 +1,3 @@
-GIT
-  remote: git://github.com/mseankelly/parallel.git
-  revision: f848265aabc43ef40ef199a07a7525f658100840
-  specs:
-    parallel (0.7.0)
-
 PATH
   remote: .
   specs:
@@ -28,6 +22,7 @@ GEM
     gherkin (2.7.6-x86-mingw32)
       json (>= 1.4.6)
     json (1.6.4)
+    parallel (0.5.18)
     rake (0.8.7)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
@@ -48,7 +43,6 @@ PLATFORMS
 
 DEPENDENCIES
   cucumber
-  parallel (>= 0.7.0)!
   parallel_tests!
   rake
   rspec (>= 2.4)
