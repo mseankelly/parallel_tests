@@ -4,7 +4,7 @@ module ParallelTests
   module Cucumber
     class Runner < ParallelTests::Test::Runner
       def self.run_tests(test_files, process_number, options)
-        color = ($stdout.tty? ? 'AUTOTEST=1 ; export AUTOTEST ;' : '')#display color when we are in a terminal
+        color = ($stdout.tty? ? "#{ParallelTests::PlatformUtils.export_environment_variable('AUTOTEST',1)} ;" : '')#display color when we are in a terminal
         runtime_logging = " --format ParallelTests::Cucumber::RuntimeLogger --out #{runtime_log}"
         cmd = [
           color,
