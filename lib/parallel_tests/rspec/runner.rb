@@ -18,7 +18,7 @@ module ParallelTests
           cmd = (run("bundle show rspec") =~ %r{/rspec-1[^/]+$} ? "spec" : "rspec")
           "bundle exec #{cmd}"
         else
-          %w[spec rspec].detect{|cmd| system "#{cmd} --version #{ParallelTests::PlatformUtils.dev_null_redirect}" }
+          %w[spec rspec].detect{|cmd| system "#{cmd} --version 2>&1" }
         end
         cmd or raise("Can't find executables rspec or spec")
       end
@@ -43,7 +43,7 @@ module ParallelTests
       end
 
       def self.rspec_1_color
-        'RSPEC_COLOR=1 ; export RSPEC_COLOR ;' if $stdout.tty?
+        "#{ParallelTests::PlatformUtils.export_environment_variable('RSPEC_COLOR', '1')} ;" if $stdout.tty?
       end
 
       def self.rspec_2_color

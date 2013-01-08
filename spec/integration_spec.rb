@@ -39,7 +39,10 @@ describe 'CLI' do
   def run_tests(test_folder, options={})
     ensure_folder folder
     processes = "-n #{options[:processes]||2}" unless options[:processes] == false
-    command = "#{options[:export]} #{executable(options)} #{folder}/#{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
+    folder_args = test_folder.split(' ').map {|x| "#{folder}/#{x}" }.join(' ')
+    export_cmd = ParallelTests::PlatformUtils.export_environment_variable(options[:export].split('=')[0], options[:export].split('=')[1]) unless options[:export].nil?
+    command = "#{export_cmd} #{executable(options)} #{folder_args} #{processes} #{options[:add]} 2>&1"
+    #puts command
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
@@ -103,7 +106,7 @@ describe 'CLI' do
     end
 
     it "exists with success if all sub-processes returned success" do
-      system("#{executable} -e 'cat /dev/null' -n 4").should == true
+      system("#{executable} -e '#{ParallelTests::PlatformUtils.cat} #{ParallelTests::PlatformUtils.dev_null}' -n 4").should == true
     end
 
     it "exists with failure if any sub-processes returned failure" do
@@ -113,12 +116,12 @@ describe 'CLI' do
 
   it "runs through parallel_rspec" do
     version = `#{executable} -v`
-    `#{bin_folder}/parallel_rspec -v`.should == version
+    `#{'ruby ' if ParallelTests::PlatformUtils.windows?}#{bin_folder}/parallel_rspec -v`.should == version
   end
 
   it "runs through parallel_cucumber" do
     version = `#{executable} -v`
-    `#{bin_folder}/parallel_cucumber -v`.should == version
+    `#{'ruby ' if ParallelTests::PlatformUtils.windows?}#{bin_folder}/parallel_cucumber -v`.should == version
   end
 
   it "runs with --group-by found" do
@@ -219,7 +222,7 @@ describe 'CLI' do
       write "features/b.feature", "Feature: xxx\n  Scenario: xxx\n    Given I FAIL"
       write "features/steps/a.rb", "Given('I print TEST_ENV_NUMBER'){ puts \"YOUR TEST ENV IS \#{ENV['TEST_ENV_NUMBER']}!\" }"
 
-      result = run_tests "features", :type => "cucumber", :add => '--pattern good'
+      result = run_tests "features", :type => "cucumber", :add => "--pattern good --test-options '--format pretty' "
 
       result.should include('YOUR TEST ENV IS 2!')
       result.should include('YOUR TEST ENV IS !')
@@ -244,7 +247,7 @@ describe 'CLI' do
       2.times{|i|
         write "features/good#{i}.feature", "Feature: xxx\n  Scenario: xxx\n    Given I print TEST_ENV_NUMBER"
       }
-      result = run_tests "features", :type => "cucumber", :add => '-n 3'
+      result = run_tests "features", :type => "cucumber", :add => "-n 3 --test-options '--format pretty' "
       result.scan(/YOUR TEST ENV IS \d?!/).sort.should == ["YOUR TEST ENV IS !", "YOUR TEST ENV IS 2!"]
     end
 
