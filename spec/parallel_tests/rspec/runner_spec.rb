@@ -17,37 +17,37 @@ describe ParallelTests::RSpec::Runner do
     end
 
     it "uses TEST_ENV_NUMBER=blank when called for process 0" do
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z|x=~/TEST_ENV_NUMBER= /}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| w['TEST_ENV_NUMBER']==''}.and_return mocked_spawned_process
       call(['xxx'], 0, {})
     end
 
     it "uses TEST_ENV_NUMBER=2 when called for process 1" do
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x=~/TEST_ENV_NUMBER=2/}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| w['TEST_ENV_NUMBER']=='2'}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "runs with color when called from cmdline" do
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x=~/ --tty /}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x=~/ --tty /}.and_return mocked_spawned_process
       $stdout.should_receive(:tty?).and_return true
       call(['xxx'],1,{})
     end
 
     it "runs without color when not called from cmdline" do
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x !~ / --tty /}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x !~ / --tty /}.and_return mocked_spawned_process
       $stdout.should_receive(:tty?).and_return false
       call(['xxx'],1,{})
     end
 
     it "runs with color for rspec 1 when called for the cmdline" do
       File.should_receive(:file?).with('script/spec').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x=~/ RSPEC_COLOR=1 /}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x=~/RSPEC_COLOR=1 /}.and_return mocked_spawned_process
       $stdout.should_receive(:tty?).and_return true
       call(['xxx'],1,{})
     end
 
     it "runs without color for rspec 1 when not called for the cmdline" do
       File.should_receive(:file?).with('script/spec').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x !~ / RSPEC_COLOR=1 /}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x !~ / RSPEC_COLOR=1 /}.and_return mocked_spawned_process
       $stdout.should_receive(:tty?).and_return false
       call(['xxx'],1,{})
     end
@@ -56,7 +56,7 @@ describe ParallelTests::RSpec::Runner do
       File.stub!(:file?).with('script/spec').and_return false
       ParallelTests.stub!(:bundler_enabled?).and_return true
       ParallelTests::RSpec::Runner.stub!(:run).with("bundle show rspec").and_return "/foo/bar/rspec-1.0.2"
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{bundle exec spec}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{bundle exec spec}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
@@ -64,46 +64,46 @@ describe ParallelTests::RSpec::Runner do
       File.stub!(:file?).with('script/spec').and_return false
       ParallelTests.stub!(:bundler_enabled?).and_return true
       ParallelTests::RSpec::Runner.stub!(:run).with("bundle show rspec").and_return "/foo/bar/rspec-2.0.2"
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{bundle exec rspec}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{bundle exec rspec}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "runs script/spec when script/spec can be found" do
       File.should_receive(:file?).with('script/spec').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{script/spec}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{script/spec}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "runs spec when script/spec cannot be found" do
       File.stub!(:file?).with('script/spec').and_return false
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x !~ %r{script/spec}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x !~ %r{script/spec}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses no -O when no opts where found" do
       File.stub!(:file?).with('spec/spec.opts').and_return false
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x !~ %r{spec/spec.opts}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x !~ %r{spec/spec.opts}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses -O spec/spec.opts when found (with script/spec)" do
       File.stub!(:file?).with('script/spec').and_return true
       File.stub!(:file?).with('spec/spec.opts').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{script/spec\s+ -O spec/spec.opts}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{script/spec\s+ -O spec/spec.opts}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses -O spec/parallel_spec.opts when found (with script/spec)" do
       File.stub!(:file?).with('script/spec').and_return true
       File.should_receive(:file?).with('spec/parallel_spec.opts').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{script/spec\s+ -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{script/spec\s+ -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses -O .rspec_parallel when found (with script/spec)" do
       File.stub!(:file?).with('script/spec').and_return true
       File.should_receive(:file?).with('.rspec_parallel').and_return true
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{script/spec\s+ -O .rspec_parallel}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{script/spec\s+ -O .rspec_parallel}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
@@ -113,7 +113,7 @@ describe ParallelTests::RSpec::Runner do
       ParallelTests.stub!(:bundler_enabled?).and_return true
       ParallelTests::RSpec::Runner.stub!(:run).with("bundle show rspec").and_return "/foo/bar/rspec-1.0.2"
 
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{spec\s+ -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{spec\s+ -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
@@ -123,12 +123,12 @@ describe ParallelTests::RSpec::Runner do
       ParallelTests.stub!(:bundler_enabled?).and_return true
       ParallelTests::RSpec::Runner.stub!(:run).with("bundle show rspec").and_return "/foo/bar/rspec-2.4.2"
 
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{rspec\s+ --color --tty -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{rspec\s+ --color --tty -O spec/parallel_spec.opts}}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses options passed in" do
-      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|x,y,z| x =~ %r{rspec -f n}}.and_return mocked_spawned_process
+      ParallelTests::RSpec::Runner.should_receive(:spawn).with{|w,x,y,z| x =~ %r{rspec -f n}}.and_return mocked_spawned_process
       call(['xxx'],1, :test_options => '-f n')
     end
 

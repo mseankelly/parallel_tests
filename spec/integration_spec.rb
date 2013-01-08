@@ -39,11 +39,23 @@ describe 'CLI' do
   def run_tests(test_folder, options={})
     ensure_folder folder
     processes = "-n #{options[:processes]||2}" unless options[:processes] == false
-    command = "cd #{folder} && #{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
-    puts command
+    command = "#{options[:export]} #{executable(options)} #{folder}/#{test_folder} #{processes} #{options[:add]} #{ParallelTests::PlatformUtils.dev_null_redirect}"
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
+    #r, w = IO.pipe
+    #processes = "-n #{options[:processes]||2}" unless options[:processes] == false
+    #command = "#{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]}#{ParallelTests::PlatformUtils.dev_null_redirect}"
+    #puts folder
+    #puts `dir #{folder.gsub("/", "\\")}\\spec`
+    #puts command
+    #pid = Process.spawn(command, :out=>w, :err=>:out, :chdir=>folder.gsub("/", "\\"))
+    #pid, status = Process.waitpid2(pid)
+    #w.close
+    #result = r.read
+    #r.close
+    #raise "FAILED #{command}\n#{result}" if status.exitstatus == !!options[:fail]
+    #result
   end
 
   it "runs tests in parallel" do
@@ -58,7 +70,7 @@ describe 'CLI' do
     # all results present
     result.scan('1 example, 0 failure').size.should == 2 # 2 results
     result.scan('2 examples, 0 failures').size.should == 1 # 1 summary
-    result.scan(/Finished in \d+\.\d+ seconds/).size.should == 2
+    result.scan(/Finished in (0|\d+\.\d+) seconds/).size.should == 2
     result.scan(/Took \d+\.\d+ seconds/).size.should == 1 # parallel summary
   end
 

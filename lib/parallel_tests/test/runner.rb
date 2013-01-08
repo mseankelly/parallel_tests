@@ -42,18 +42,18 @@ module ParallelTests
       end
 
       def self.execute_command(cmd, process_number, options)
-        cmd = "#{ParallelTests::PlatformUtils.export_environment_variable('TEST_ENV_NUMBER',test_env_number(process_number))}; #{cmd}"
+        #cmd = "#{ParallelTests::PlatformUtils.export_environment_variable('TEST_ENV_NUMBER',test_env_number(process_number))}; #{cmd}"
         #f = open("#{cmd}", 'r')
         #output = fetch_output(f)
         #f.close
         #{:stdout => output, :exit_status => $?.exitstatus}
         r, w = IO.pipe
-        cmd_pid = spawn(cmd, :out=>w, :err=>:out)
-
+        cmd_pid = spawn({'TEST_ENV_NUMBER' => test_env_number(process_number).to_s}, cmd, :out=>w, :err=>:out)
         cmd_pid, status = Process.waitpid2(cmd_pid)
 
         w.close
-        output = r.read
+        output = fetch_output(r) #.read
+        #puts "output: #{output}"
         r.close
         {:stdout => output, :exit_status => status.exitstatus}
       end

@@ -26,7 +26,7 @@ module ParallelTests
     end
 
     def self.dev_null_redirect
-      windows? ? "> NUL" : "2>&1"
+      windows? ? "2>&1" : "2>&1"
     end
 
     def self.dev_null
@@ -46,7 +46,7 @@ module ParallelTests
     end
 
     def self.export_environment_variable(name, value)
-      windows? ? "SET #{name}=#{value}" : "#{name}=#{value} ; export #{name}"
+      windows? ? "SET #{name}=#{value} " : "#{name}=#{value} ; export #{name}"
     end
 
     def self.windows?

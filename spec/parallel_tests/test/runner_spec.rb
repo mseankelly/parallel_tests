@@ -9,17 +9,17 @@ describe ParallelTests::Test::Runner do
     end
 
     it "uses TEST_ENV_NUMBER=blank when called for process 0" do
-      ParallelTests::Test::Runner.should_receive(:spawn).with{|x,y,z|x=~/TEST_ENV_NUMBER= /}.and_return mocked_spawned_process
+      ParallelTests::Test::Runner.should_receive(:spawn).with{|w,x,y,z| w['TEST_ENV_NUMBER']==''}.and_return mocked_spawned_process
       call(['xxx'],0,{})
     end
 
     it "uses TEST_ENV_NUMBER=2 when called for process 1" do
-      ParallelTests::Test::Runner.should_receive(:spawn).with{|x,y,z| x=~/TEST_ENV_NUMBER=2/}.and_return mocked_spawned_process
+      ParallelTests::Test::Runner.should_receive(:spawn).with{|w,x,y,z| w['TEST_ENV_NUMBER']=='2'}.and_return mocked_spawned_process
       call(['xxx'],1,{})
     end
 
     it "uses options" do
-      ParallelTests::Test::Runner.should_receive(:spawn).with{|x,y,z| x=~ %r{ruby -Itest .* -- -v}}.and_return mocked_spawned_process
+      ParallelTests::Test::Runner.should_receive(:spawn).with{|w,x,y,z| x=~ %r{ruby -Itest .* -- -v}}.and_return mocked_spawned_process
       call(['xxx'],1,:test_options => '-v')
     end
 
