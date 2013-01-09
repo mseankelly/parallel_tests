@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-exec "ruby #{File.join(File.dirname(__FILE__), 'parallel_test')} -t cucumber #{ARGV.map{|a| "'#{a}'" } * ' '}"
+exec "ruby #{File.join(File.dirname(__FILE__), 'parallel_test')} -t cucumber #{ARGV.map{|a| "\"#{a}\"" } * ' '}"

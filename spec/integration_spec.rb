@@ -42,23 +42,9 @@ describe 'CLI' do
     folder_args = test_folder.split(' ').map {|x| "#{folder}/#{x}" }.join(' ')
     export_cmd = ParallelTests::PlatformUtils.export_environment_variable(options[:export].split('=')[0], options[:export].split('=')[1]) unless options[:export].nil?
     command = "#{export_cmd} #{executable(options)} #{folder_args} #{processes} #{options[:add]} 2>&1"
-    #puts command
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
     result
-    #r, w = IO.pipe
-    #processes = "-n #{options[:processes]||2}" unless options[:processes] == false
-    #command = "#{options[:export]} #{executable(options)} #{test_folder} #{processes} #{options[:add]}#{ParallelTests::PlatformUtils.dev_null_redirect}"
-    #puts folder
-    #puts `dir #{folder.gsub("/", "\\")}\\spec`
-    #puts command
-    #pid = Process.spawn(command, :out=>w, :err=>:out, :chdir=>folder.gsub("/", "\\"))
-    #pid, status = Process.waitpid2(pid)
-    #w.close
-    #result = r.read
-    #r.close
-    #raise "FAILED #{command}\n#{result}" if status.exitstatus == !!options[:fail]
-    #result
   end
 
   it "runs tests in parallel" do
@@ -182,7 +168,7 @@ describe 'CLI' do
     write "spec/x_spec.rb", "puts 'XXX'"
     write "spec/y_spec.rb", "puts 'YYY'"
     write "spec/z_spec.rb", "puts 'ZZZ'"
-    result = run_tests "spec", :add => "-p '^spec/(x|z)'", :type => "rspec"
+    result = run_tests "spec", :add => "-p \"^spec/(x|z)\"", :type => "rspec"
     result.should include('XXX')
     result.should_not include('YYY')
     result.should include('ZZZ')
