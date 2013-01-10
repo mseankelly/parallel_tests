@@ -1,7 +1,6 @@
 require 'optparse'
 require 'parallel_tests/test/runner'
 require 'win32/dir'
-require 'win32/process'
 
 module ParallelTest
   module CLI
