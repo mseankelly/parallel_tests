@@ -15,6 +15,7 @@ describe 'CLI' do
 
   def write(file, content)
     path = "#{folder}/#{file}"
+    #puts "writing to: #{path}"
     ensure_folder File.dirname(path)
     File.open(path, 'w'){|f| f.write content }
     path
@@ -40,7 +41,7 @@ describe 'CLI' do
     ensure_folder folder
     processes = "-n #{options[:processes]||2}" unless options[:processes] == false
     folder_args = test_folder.split(' ').map {|x| "#{folder}/#{x}" }.join(' ')
-    export_cmd = ParallelTests::PlatformUtils.export_environment_variable(options[:export].split('=')[0], options[:export].split('=')[1]) unless options[:export].nil?
+    export_cmd = ParallelTests::PlatformUtils.export_environment_variable(options[:export].split('=')[0], options[:export].split('=')[1]) + " &&" unless options[:export].nil?
     command = "#{export_cmd} #{executable(options)} #{folder_args} #{processes} #{options[:add]} 2>&1"
     result = `#{command}`
     raise "FAILED #{command}\n#{result}" if $?.success? == !!options[:fail]
@@ -88,7 +89,7 @@ describe 'CLI' do
 
     it "can exec given command non-parallel" do
       result = `#{executable} -e 'ruby -e "sleep(rand(10)/100.0); puts ENV[:TEST_ENV_NUMBER.to_s].inspect"' -n 4 --non-parallel`
-      result.split("\n").should == %w["" "2" "3" "4"]
+      result.split("\n\n").should == %w["" "2" "3" "4"]
     end
 
     it "exists with success if all sub-processes returned success" do
@@ -117,10 +118,10 @@ describe 'CLI' do
   end
 
   it "runs faster with more processes" do
+    t = Time.now
     2.times{|i|
       write "spec/xxx#{i}_spec.rb",  'describe("it"){it("should"){sleep 5}}; $stderr.puts ENV["TEST_ENV_NUMBER"]'
     }
-    t = Time.now
     run_tests("spec", :processes => 2, :type => 'rspec')
     expected = 10
     (Time.now - t).should <= expected
@@ -159,7 +160,7 @@ describe 'CLI' do
     }
     result = run_tests "spec",
       :export => "PARALLEL_TEST_PROCESSORS=#{processes}",
-      :processes => processes,
+      :processes => false,
       :type => 'rspec'
     result.scan(/ENV-.?-/).should =~ ["ENV--", "ENV-2-", "ENV-3-", "ENV-4-", "ENV-5-"]
   end
@@ -168,7 +169,11 @@ describe 'CLI' do
     write "spec/x_spec.rb", "puts 'XXX'"
     write "spec/y_spec.rb", "puts 'YYY'"
     write "spec/z_spec.rb", "puts 'ZZZ'"
-    result = run_tests "spec", :add => "-p \"^spec/(x|z)\"", :type => "rspec"
+
+    result = run_tests "spec", :add => "-p \"/(x|z)_spec.rb\"", :type => "rspec"
+    # this one works, too:
+    #result = run_tests "spec/x_spec.rb spec/z_spec.rb", :type => "rspec"
+
     result.should include('XXX')
     result.should_not include('YYY')
     result.should include('ZZZ')
@@ -209,7 +214,7 @@ describe 'CLI' do
       write "features/steps/a.rb", "Given('I print TEST_ENV_NUMBER'){ puts \"YOUR TEST ENV IS \#{ENV['TEST_ENV_NUMBER']}!\" }"
 
       result = run_tests "features", :type => "cucumber", :add => "--pattern good --test-options '--format pretty' "
-
+      debugger
       result.should include('YOUR TEST ENV IS 2!')
       result.should include('YOUR TEST ENV IS !')
       result.should_not include('I FAIL')
@@ -217,16 +222,15 @@ describe 'CLI' do
 
     it "writes a runtime log" do
       log = "tmp/parallel_runtime_cucumber.log"
-      write(log, "x")
+      File.write(log, "x")
       2.times{|i|
         # needs sleep so that runtime loggers dont overwrite each other initially
         write "features/good#{i}.feature", "Feature: xxx\n  Scenario: xxx\n    Given I print TEST_ENV_NUMBER\n    And I sleep a bit"
       }
       run_tests "features", :type => "cucumber"
-      read(log).gsub(/\.\d+/,'').split("\n").should =~ [
-        "features/good0.feature:0",
-        "features/good1.feature:0"
-      ]
+      test_array = File.read(log).gsub(/\.\d+/,'').split("\n").sort
+      test_array[0].should =~ /(features\\good0.feature:0|features\/good0.feature:0)/
+      test_array[1].should =~ /(features\\good1.feature:0|features\/good1.feature:0)/
     end
 
     it "runs each feature once when there are more processes then features (issue #89)" do
