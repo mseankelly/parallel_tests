@@ -49,7 +49,9 @@ module ParallelTest
     def self.report_results(runner, test_results)
       results = runner.find_results(test_results.map { |result| result[:stdout] }*"")
       puts ""
-      puts runner.summarize_results(results)
+      summarized_results = runner.summarize_results(results)
+      puts summarized_results
+      File.new("tmp/summarized_results.log", "w").write(summarized_results)
     end
 
     def self.report_number_of_tests(runner, groups)

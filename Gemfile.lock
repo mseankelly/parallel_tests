@@ -2,7 +2,11 @@ PATH
   remote: .
   specs:
     parallel_tests (0.8.14)
+      cucumber
       parallel
+      rake
+      rspec (>= 2.4)
+      win32-dir
 
 GEM
   remote: http://rubygems.org/
@@ -22,7 +26,7 @@ GEM
     gherkin (2.7.6-x86-mingw32)
       json (>= 1.4.6)
     json (1.6.4)
-    parallel (0.5.18)
+    parallel (0.6.1)
     rake (0.8.7)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)

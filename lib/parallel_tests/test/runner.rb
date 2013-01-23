@@ -42,13 +42,10 @@ module ParallelTests
       end
 
       def self.execute_command(cmd, process_number, options)
-        r, w = IO.pipe
-        cmd_pid = spawn({'TEST_ENV_NUMBER' => test_env_number(process_number).to_s}, cmd, :out=>w, :err=>:out)
+        cmd_pid = spawn({'TEST_ENV_NUMBER' => test_env_number(process_number).to_s}, "#{cmd} > tmp/exec_output_#{process_number}.log", :err=>:out)
         cmd_pid, status = Process.waitpid2(cmd_pid)
 
-        w.close
-        output = fetch_output(r)
-        r.close
+        output = IO.read("tmp/exec_output_#{process_number}.log")
         {:stdout => output, :exit_status => status.exitstatus}
       end
 
