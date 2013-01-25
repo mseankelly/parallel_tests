@@ -51,7 +51,6 @@ module ParallelTest
       puts ""
       summarized_results = runner.summarize_results(results)
       puts summarized_results
-      File.new("tmp/summarized_results.log", "w").write(summarized_results)
     end
 
     def self.report_number_of_tests(runner, groups)
@@ -135,7 +134,8 @@ TEXT
       start = Time.now
       yield
       puts ""
-      puts "Took #{Time.now - start} seconds"
+      run_time = ((Time.now - start)/60).to_s.match(/(\d+.\d{2})/)[0]
+      puts "Took #{run_time}m"
     end
 
     def self.final_fail_message(lib)

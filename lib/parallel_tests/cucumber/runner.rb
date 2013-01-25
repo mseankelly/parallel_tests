@@ -7,7 +7,6 @@ module ParallelTests
         color = ($stdout.tty? ? "#{ParallelTests::PlatformUtils.export_environment_variable('AUTOTEST',1)} ;" : '')#display color when we are in a terminal
         runtime_logging = " --format ParallelTests::Cucumber::RuntimeLogger --out #{runtime_log}"
         cmd = [
-          color,
           executable,
           (runtime_logging if File.directory?(File.dirname(runtime_log))),
           cucumber_opts(options[:test_options]),
