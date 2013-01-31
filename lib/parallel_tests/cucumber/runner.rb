@@ -4,12 +4,15 @@ module ParallelTests
   module Cucumber
     class Runner < ParallelTests::Test::Runner
       def self.run_tests(test_files, process_number, options)
-        color = ($stdout.tty? ? "#{ParallelTests::PlatformUtils.export_environment_variable('AUTOTEST',1)} ;" : '')#display color when we are in a terminal
+        ENV["AUTOTEST"] = "1" if $stdout.tty?#display color when we are in a terminal
+        #TODO: Add verification that the log_files directory has been created
+        failed_log =  "-f rerun --out ./log_files/rerun#{process_number}.txt"
         runtime_logging = " --format ParallelTests::Cucumber::RuntimeLogger --out #{runtime_log}"
         cmd = [
           executable,
           (runtime_logging if File.directory?(File.dirname(runtime_log))),
           cucumber_opts(options[:test_options]),
+          failed_log,
           *test_files
         ].compact.join(" ")
         execute_command(cmd, process_number, options)
@@ -59,6 +62,27 @@ module ParallelTests
           end
           "#{sums[0]} (#{sums[1..-1].join(", ")})"
         end.compact.join("\n")
+      end
+
+      def self.summarize_failures
+        r, w = IO.pipe
+        files = Dir.glob("./log_files/*.txt")
+        files.each do |file|
+          text = IO.read("#{file}")
+          text.split.each {|line| w << line; w << "\n"}
+        end
+        w.close
+        output = r.read
+        r.close
+        delete_log_files
+        output
+      end
+
+      def self.delete_log_files
+        files = Dir.glob("./log_files/*.txt")
+        files.each do |file|
+          File.delete(file)
+        end
       end
 
       def self.cucumber_opts(given)

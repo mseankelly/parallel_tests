@@ -50,6 +50,12 @@ module ParallelTest
       results = runner.find_results(test_results.map { |result| result[:stdout] }*"")
       puts ""
       summarized_results = runner.summarize_results(results)
+      summarized_failures = runner.summarize_failures
+      puts "Parallel Tests Run Summary:"
+      puts "Failing Scenarios"
+      puts summarized_failures
+      puts "\n"
+      puts "Results:"
       puts summarized_results
     end
 

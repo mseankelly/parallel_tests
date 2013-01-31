@@ -42,11 +42,13 @@ module ParallelTests
       end
 
       def self.execute_command(cmd, process_number, options)
+        puts "starting process #{process_number}..."
         r, w = IO.pipe
-        cmd_pid = spawn(cmd, :out=>w, :err=>:out)
+        cmd_pid = spawn(cmd, :out => w, :err=>:out)
         cmd_pid, status = Process.waitpid2(cmd_pid)
         w.close
         output = r.read
+        r.close
         puts output
         {:stdout => output, :exit_status => status.exitstatus}
       end
