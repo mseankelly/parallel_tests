@@ -75,6 +75,8 @@ module ParallelTests
         output = r.read
         r.close
         delete_log_files
+        File.delete("./rerun.txt")
+        File.open("./rerun.txt", "w") {|f| f.write(output)} unless (output.nil? || output == "")
         output
       end
 
